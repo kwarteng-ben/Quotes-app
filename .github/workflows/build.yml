@@ -1,0 +1,21 @@
+name: Build Kivy APK
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build with Docker
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/home/user/app kivy/buildozer buildozer -v android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: kivy-apk
+        path: bin/*.apk
